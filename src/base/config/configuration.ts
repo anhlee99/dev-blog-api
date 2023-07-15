@@ -9,7 +9,7 @@ export default () => ({
     username: process.env.DB_USER || 'username',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'dbname',
-    schema: process.env.DB_SCHEMA || 'sphacy_v1_new',
+    schema: process.env.DB_SCHEMA || 'dev_blog',
     extra: {
       connectionLimit: 30,
     },
