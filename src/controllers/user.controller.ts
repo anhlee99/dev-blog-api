@@ -14,31 +14,27 @@ import { AuthGuard } from '../base/auth/auth.guard';
 import { TransformInterceptor } from '../base/config/transform.interceptor';
 import { RegisterDto } from '../dto/register.dto';
 import { UsersService } from '../services/users.service';
+import { UpdateUserDto } from "../dto/update-user.dto";
 // import { Public } from "../base/auth/constants";
 
-@Controller('auth')
-export class AuthController {
+@Controller('user')
+export class UserController {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
   ) {}
 
-  @Post('register')
+  @UseGuards(AuthGuard)
+  @Get('profile')
   @UseInterceptors(TransformInterceptor)
-  register(@Body() registerDto: RegisterDto) {
-    return this.userService.register(registerDto);
+  getProfile(@Request() req) {
+    return this.userService.getProfile(req.user.user_id);
   }
 
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @Post('update')
   @UseInterceptors(TransformInterceptor)
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.login_name, signInDto.password);
-  }
-
-  @Get('test')
-  @UseInterceptors(TransformInterceptor)
-  test(@Request() req) {
-    return { message: 'abc' };
+  updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateProfile(req.user.user_id, updateUserDto);
   }
 }
