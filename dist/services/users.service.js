@@ -17,9 +17,94 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../entitys/user.entity");
 const typeorm_2 = require("typeorm");
+const account_entity_1 = require("../entitys/account.entity");
+const message_util_1 = require("../utils/message.util");
 let UsersService = exports.UsersService = class UsersService {
-    constructor(userRepository) {
+    constructor(dataSource, userRepository, accountRepository) {
+        this.dataSource = dataSource;
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
+    }
+    async register(registerDto) {
+        let accountEntity = await this.accountRepository.findOne({
+            where: { login_name: registerDto.login_name },
+        });
+        if (accountEntity != null) {
+            return {
+                code: common_1.HttpStatus.BAD_REQUEST,
+                message: message_util_1.LOGIN_NAME_EXIST,
+            };
+        }
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            accountEntity = new account_entity_1.AccountEntity();
+            accountEntity.account_type = 0;
+            accountEntity.login_name = registerDto.login_name;
+            accountEntity.password = registerDto.password;
+            await queryRunner.manager.save(accountEntity);
+            const userEntity = new user_entity_1.UserEntity();
+            userEntity.account_id = accountEntity.id;
+            userEntity.email = registerDto.login_name;
+            await queryRunner.manager.save(userEntity);
+            await queryRunner.commitTransaction();
+            return {
+                code: common_1.HttpStatus.CREATED,
+                message: message_util_1.SUCCESSFUL,
+            };
+        }
+        catch (err) {
+            await queryRunner.rollbackTransaction();
+            return {
+                code: common_1.HttpStatus.BAD_REQUEST,
+                message: message_util_1.FAILURE,
+            };
+        }
+        finally {
+            await queryRunner.release();
+        }
+    }
+    async getProfile(userId) {
+        const userEntity = await this.userRepository.findOne({
+            where: { id: userId },
+        });
+        return {
+            result: userEntity,
+        };
+    }
+    async updateProfile(userId, updateUserDto) {
+        const userEntity = await this.userRepository.findOne({
+            where: { id: userId },
+        });
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            userEntity.fullname = updateUserDto.fullname || userEntity.fullname;
+            userEntity.address = updateUserDto.address || userEntity.address;
+            userEntity.bio = updateUserDto.bio || userEntity.bio;
+            userEntity.email = updateUserDto.email || userEntity.email;
+            userEntity.facebook = updateUserDto.facebook || userEntity.facebook;
+            userEntity.user_setting_data = updateUserDto.user_setting_data || userEntity.user_setting_data;
+            await queryRunner.manager.save(userEntity);
+            await queryRunner.commitTransaction();
+            return {
+                code: common_1.HttpStatus.OK,
+                message: message_util_1.SUCCESSFUL,
+                result: userEntity,
+            };
+        }
+        catch (err) {
+            await queryRunner.rollbackTransaction();
+            return {
+                code: common_1.HttpStatus.BAD_REQUEST,
+                message: message_util_1.FAILURE,
+            };
+        }
+        finally {
+            await queryRunner.release();
+        }
     }
     async add(user) {
         await this.userRepository.save(user);
@@ -32,25 +117,28 @@ let UsersService = exports.UsersService = class UsersService {
             where: { id: id },
         });
     }
-    findOneByUsername(username) {
-        return this.userRepository.findOne({
-            where: { username: username },
-        });
-    }
     async modify(user) {
         const userNew = await this.userRepository.findOne({
             where: { id: user.id },
         });
-        userNew.active = user.active;
+        userNew.status = user.status;
         await this.userRepository.save(userNew);
     }
     async remove(id) {
         await this.userRepository.delete(id);
     }
+    findAccountByLoginName(username) {
+        return this.accountRepository.findOne({
+            where: { login_name: username },
+        });
+    }
 };
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
+    __param(2, (0, typeorm_1.InjectRepository)(account_entity_1.AccountEntity)),
+    __metadata("design:paramtypes", [typeorm_2.DataSource,
+        typeorm_2.Repository,
+        typeorm_2.Repository])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

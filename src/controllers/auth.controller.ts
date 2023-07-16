@@ -7,25 +7,38 @@ import {
   Get,
   HttpStatus,
   Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '../base/auth/auth.guard';
-import { Public } from "../base/auth/constants";
+import { TransformInterceptor } from '../base/config/transform.interceptor';
+import { RegisterDto } from '../dto/register.dto';
+import { UsersService } from '../services/users.service';
+// import { Public } from "../base/auth/constants";
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Public()
-  @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  @Post('register')
+  @UseInterceptors(TransformInterceptor)
+  register(@Body() registerDto: RegisterDto) {
+    return this.userService.register(registerDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(TransformInterceptor)
+  signIn(@Body() signInDto: Record<string, any>) {
+    return this.authService.signIn(signInDto.login_name, signInDto.password);
+  }
+
+  @Get('test')
+  @UseInterceptors(TransformInterceptor)
+  test(@Request() req) {
+    return { message: 'abc' };
   }
 }

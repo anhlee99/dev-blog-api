@@ -15,38 +15,52 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("../services/auth.service");
-const auth_guard_1 = require("../base/auth/auth.guard");
-const constants_1 = require("../base/auth/constants");
+const transform_interceptor_1 = require("../base/config/transform.interceptor");
+const register_dto_1 = require("../dto/register.dto");
+const users_service_1 = require("../services/users.service");
 let AuthController = exports.AuthController = class AuthController {
-    constructor(authService) {
+    constructor(authService, userService) {
         this.authService = authService;
+        this.userService = userService;
+    }
+    register(registerDto) {
+        return this.userService.register(registerDto);
     }
     signIn(signInDto) {
-        return this.authService.signIn(signInDto.username, signInDto.password);
+        return this.authService.signIn(signInDto.login_name, signInDto.password);
     }
-    getProfile(req) {
-        return req.user;
+    test(req) {
+        return { message: 'abc' };
     }
 };
 __decorate([
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, constants_1.Public)(),
+    (0, common_1.Post)('register'),
+    (0, common_1.UseInterceptors)(transform_interceptor_1.TransformInterceptor),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "register", null);
+__decorate([
     (0, common_1.Post)('login'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseInterceptors)(transform_interceptor_1.TransformInterceptor),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    (0, common_1.Get)('profile'),
+    (0, common_1.Get)('test'),
+    (0, common_1.UseInterceptors)(transform_interceptor_1.TransformInterceptor),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "getProfile", null);
+], AuthController.prototype, "test", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        users_service_1.UsersService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map
