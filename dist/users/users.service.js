@@ -70,9 +70,11 @@ let UsersService = exports.UsersService = class UsersService {
         }
     }
     async getProfile(userId) {
-        const a = await this.userRepository.queryTest('a');
+        const userEntity = await this.userRepository.findOne({
+            where: { id: userId },
+        });
         return {
-            result: a,
+            result: userEntity,
         };
     }
     async updateProfile(userId, updateUserDto) {
