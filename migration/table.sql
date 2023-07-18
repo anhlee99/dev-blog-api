@@ -48,3 +48,17 @@ comment on column t_users.fullname is 'Họ và tên';
 comment on column t_users.shortname is 'Ten viet tắt(tên thân mật) neu co';
 comment on column t_users.user_setting_data is 'Jsonb data setting';
 comment on column t_users.status is '0: Inactive, 1: Activate, 9: Deleted';
+
+-- m_local_file  (file info)//
+CREATE TABLE m_local_file (
+  id serial8 PRIMARY KEY,
+  user_id bigint NULL,
+  filename VARCHAR ( 255 ) NULL,
+  path VARCHAR ( 255 ) NULL,
+  mimetype VARCHAR ( 100 )  NULL,
+  created_at TIMESTAMP
+);
+
+comment on column m_local_file.user_id is 'owner';
+CREATE UNIQUE INDEX idx_m_local_file_path ON m_local_file(path);
+
