@@ -14,15 +14,13 @@ export interface Response<T> {
 }
 
 @Injectable()
-export class TransformInterceptor<T>
+export class TransformWebInterceptor<T>
   implements NestInterceptor<T, Response<T>>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return next.handle().pipe(
       map((data) => ({
         statusCode:

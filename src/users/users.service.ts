@@ -1,28 +1,28 @@
-import { HttpCode, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { HttpCode, HttpStatus, Injectable, LoggerService } from '@nestjs/common';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entitys/user.entity';
 // This should be a real class/interface representing a user entity
 import { DataSource, Repository } from 'typeorm';
 import { AccountEntity } from '../entitys/account.entity';
-import { RegisterDto } from '../dto/register.dto';
-import { FAILURE, LOGIN_NAME_EXIST, SUCCESSFUL } from "../utils/message.util";
-import { UpdateUserDto } from "../dto/update-user.dto";
+import { RegisterUserDto } from './dto/register.user.dto';
+import { FAILURE, LOGIN_NAME_EXIST, SUCCESSFUL } from '../utils/message.util';
+import { UpdateUserDto } from './dto/update.user.dto';
+import { UserRepository } from '../repository/user.repository';
+import { AccountRepository } from '../repository/account.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private dataSource: DataSource,
+    @InjectDataSource() private dataSource: DataSource,
 
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userRepository: UserRepository,
 
-    @InjectRepository(AccountEntity)
-    private accountRepository: Repository<AccountEntity>,
+    private accountRepository: AccountRepository,
   ) {}
 
   // user //
 
-  async register(registerDto: RegisterDto): Promise<NonNullable<unknown>> {
+  async register(registerDto: RegisterUserDto): Promise<NonNullable<unknown>> {
     let accountEntity = await this.accountRepository.findOne({
       where: { login_name: registerDto.login_name },
     });
@@ -37,15 +37,23 @@ export class UsersService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      // create account //
       accountEntity = new AccountEntity();
       accountEntity.account_type = 0;
       accountEntity.login_name = registerDto.login_name;
       accountEntity.password = registerDto.password;
       await queryRunner.manager.save(accountEntity);
+
+      // create user //
       const userEntity = new UserEntity();
       userEntity.account_id = accountEntity.id;
       userEntity.email = registerDto.login_name;
       await queryRunner.manager.save(userEntity);
+
+      // update account //
+      accountEntity.user_id = userEntity.id;
+      await queryRunner.manager.save(accountEntity);
+
       await queryRunner.commitTransaction();
       return {
         code: HttpStatus.CREATED,
@@ -63,11 +71,13 @@ export class UsersService {
   }
 
   async getProfile(userId: number): Promise<NonNullable<unknown>> {
-    const userEntity = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+    // const userEntity = await this.userRepository.findOne({
+    //   where: { id: userId },
+    // });
+
+    const a = await this.userRepository.queryTest('a');
     return {
-      result: userEntity,
+      result: a,
     };
   }
 
@@ -106,34 +116,8 @@ export class UsersService {
     }
   }
 
-  async add(user: UserEntity): Promise<void> {
-    await this.userRepository.save(user);
-  }
-
-  findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
-  }
-
-  findOne(id: number): Promise<UserEntity> {
-    return this.userRepository.findOne({
-      where: { id: id },
-    });
-  }
-
-  async modify(user: UserEntity): Promise<void> {
-    const userNew = await this.userRepository.findOne({
-      where: { id: user.id },
-    });
-    userNew.status = user.status;
-    await this.userRepository.save(userNew);
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.userRepository.delete(id);
-  }
-
   // account //
-  findAccountByLoginName(username: string): Promise<AccountEntity> {
+  async findAccountByLoginName(username: string): Promise<AccountEntity> {
     return this.accountRepository.findOne({
       where: { login_name: username },
     });

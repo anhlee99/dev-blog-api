@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   BeforeInsert,
   BeforeUpdate,
   Column,
@@ -11,7 +12,7 @@ import * as moment from 'moment/moment';
 import { DATE_FORMAT } from '../utils/constants.ultis';
 
 @Entity('t_users')
-export class UserEntity {
+export class UserEntity extends BaseEntity{
 
   @PrimaryGeneratedColumn( {type: 'bigint'} )
   id: number;

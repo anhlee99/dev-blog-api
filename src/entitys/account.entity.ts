@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   BeforeInsert, BeforeUpdate,
   Column,
   CreateDateColumn,
@@ -8,9 +9,10 @@ import {
 } from 'typeorm';
 import * as moment from 'moment';
 import { DATE_FORMAT } from '../utils/constants.ultis';
+import { Exclude } from 'class-transformer';
 
 @Entity('t_accounts')
-export class AccountEntity {
+export class AccountEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -24,6 +26,7 @@ export class AccountEntity {
   login_name: string;
 
   @Column()
+  @Exclude() // loại trừ
   password: string;
 
   @Column()
