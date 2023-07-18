@@ -18,8 +18,7 @@ export function configuration(): Record<string, any> {
       },
       autoLoadEntities: true,
     },
-    UPLOADED_FILES_DESTINATION: process.env.UPLOADED_FILES_DESTINATION,
-    UPLOADED_FILES_FILE_LIMIT_SIZE: process.env.UPLOADED_FILES_FILE_LIMIT_SIZE || (3 * 1024), // unit kB
+    UPLOADED_FILES_DESTINATION: process.env.UPLOADED_FILES_DESTINATION
   };
 }
 
