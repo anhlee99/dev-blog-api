@@ -29,11 +29,11 @@ jobs:
           Host bastion
             HostName {{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
-            Port 22
             IdentityFile ~/.ssh/id_rsa-bastion
   
     - name: Check ssh key
-      run: ssh bastion
+      run: scp ./dist/ bastion:/root/dev-blog-api
+
        
 
   
