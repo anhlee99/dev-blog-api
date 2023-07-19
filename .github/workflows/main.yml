@@ -1,25 +1,16 @@
 on:
   push:
     branches:
-    - deploy
-  release:
-    types: [publish]
-    
-jobs:
-  setup-env:
-    name: Setup Env
-    runs-on: ubuntu-latest
+      - deploy
+  workflow_dispatch:
   
-    steps: 
-#     - uses: actions/checkout@v3
-#     - uses: actions/setup-node@v3
-#       with:
-#         node-version: 16
-#         cache: 'npm'
-#     - run: npm ci
-#     - run: npm test
+jobs:
+  run_pull:
+    name: run pull
+    runs-on: ubuntu-latest
     
-    - name: Install SSH key of bastion
+    steps:
+    - name: install ssh keys
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
       run: |
@@ -27,9 +18,6 @@ jobs:
         echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
     - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} " ls "
-#       run: ls 
-      
-       
-
-  
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ls"
+    - name: cleanup
+      run: rm -rf ~/.ssh
