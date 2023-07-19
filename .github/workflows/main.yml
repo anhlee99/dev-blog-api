@@ -25,9 +25,15 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         name: id_rsa-bastion
         known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+        config: |
+          Host bastion
+            HostName {{ secrets.SSH_HOST }}
+            User ${{ secrets.SSH_USER }}
+            Port 22
+            IdentityFile ~/.ssh/id_rsa-bastion
   
-    - name: Deploy with rsync
-      run: rsync -avz ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/dev-blog-api/dist/
+    - name: Check ssh key
+      run: ssh bastion
        
 
   
