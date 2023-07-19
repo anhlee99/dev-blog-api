@@ -32,8 +32,8 @@ jobs:
             IdentityFile ~/.ssh/id_rsa-bastion
   
     - name: Check ssh key
-#       run: scp ./dist/ bastion:/root/dev-blog-api
-      run: ls 
+      run: scp ./dist/ bastion:/root/dev-blog-api
+#       run: ls 
       
        
 
