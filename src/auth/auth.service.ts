@@ -1,12 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterUserDto } from '../users/dto/register.user.dto';
 import { UserRepository } from '../repository/user.repository';
 import { AccountRepository } from '../repository/account.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AccountEntity } from '../entitys/account.entity';
-import { UserEntity } from '../entitys/user.entity';
 
 @Injectable()
 export class AuthService {

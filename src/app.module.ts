@@ -5,15 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { configuration, configurationValidate } from './config/configuration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { UsersModule } from './users/users.module';
-import { UserEntity } from './entitys/user.entity';
-import { AccountEntity } from './entitys/account.entity';
 import { CommonModule } from './commons/common.module';
 import * as Joi from 'joi';
 import { AppConfig } from './config/app-config';
-import { doc } from 'prettier';
-import { join } from 'path';
 
 @Module({
   imports: [
@@ -35,7 +30,7 @@ import { join } from 'path';
     UsersModule,
     CommonModule,
   ],
-  controllers: [],
-  providers: [AppConfig],
+  controllers: [AppController],
+  providers: [AppService, AppConfig],
 })
 export class AppModule {}

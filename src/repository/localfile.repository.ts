@@ -1,6 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { AccountEntity } from '../entitys/account.entity';
 import { LocalFileEntity } from '../entitys/localfile.entity';
 
 @Injectable()

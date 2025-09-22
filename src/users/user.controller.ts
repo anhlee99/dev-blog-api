@@ -2,16 +2,13 @@ import {
   Body,
   Controller,
   Post,
-  HttpCode,
   UseGuards,
   Get,
-  HttpStatus,
   Request,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { TransformWebInterceptor } from '../config/web/interceptor/transform.web.interceptor';
-import { RegisterUserDto } from './dto/register.user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update.user.dto';
 // import { Public } from "../base/auth/constants";

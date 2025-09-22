@@ -1,9 +1,8 @@
-import { Injectable, Request } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LocalFileRepository } from '../repository/localfile.repository';
 import { LocalFileEntity } from '../entitys/localfile.entity';
 import { SUCCESSFUL } from '../utils/message.util';
 import { Util } from '../utils/util';
-import { AppConfig } from '../config/app-config';
 
 @Injectable()
 export class CommonService {

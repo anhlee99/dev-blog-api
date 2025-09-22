@@ -3,14 +3,12 @@ import {
   Controller,
   Post,
   HttpCode,
-  UseGuards,
   Get,
   HttpStatus,
   Request,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './guard/auth.guard';
 import { TransformWebInterceptor } from '../config/web/interceptor/transform.web.interceptor';
 import { RegisterUserDto } from '../users/dto/register.user.dto';
 import { UsersService } from '../users/users.service';
@@ -39,6 +37,7 @@ export class AuthController {
   @Get('test')
   @UseInterceptors(TransformWebInterceptor)
   test(@Request() req) {
+    console.log('Test endpoint called', req.user);
     return { message: 'abc' };
   }
 }

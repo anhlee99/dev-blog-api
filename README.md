@@ -1,80 +1,188 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Dev Blog API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A NestJS-based REST API for a development blog platform with user authentication, file uploads, and blog management features.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## ✨ Features
 
-## Description
+- 🔐 JWT-based authentication
+- 📝 User registration and profile management  
+- 🖼️ Secure file upload with validation
+- 🛡️ Security middleware (Helmet, CORS)
+- 📊 Request compression
+- ⚡ Global exception handling
+- 🔍 Input validation and sanitization
+- 🗄️ PostgreSQL database integration
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Technologies
 
-## Configuration
+- **Framework**: NestJS 10.x
+- **Database**: PostgreSQL with TypeORM
+- **Authentication**: JWT
+- **Validation**: class-validator
+- **Security**: Helmet, CORS
+- **File Upload**: Multer
+- **Language**: TypeScript
+
+## 📋 Prerequisites
+
+- Node.js 16.20.1 or higher
+- PostgreSQL 13.11 or higher
+- npm or yarn
+
+## ⚙️ Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd dev-blog-api
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment setup**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Update the `.env` file with your configuration:
+   ```env
+   # Database
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=your_username
+   DB_PASSWORD=your_password
+   DB_NAME=dev_blog
+   
+   # JWT (Generate a secure secret key)
+   JWT_SECRET=your-super-secure-jwt-secret-key-min-32-chars
+   
+   # File uploads
+   UPLOADED_FILES_DESTINATION=./public/upload
+   ```
+
+4. **Database setup**
+   - Create a PostgreSQL database named `dev_blog`
+   - Run migrations (if available) or let TypeORM create tables automatically
+
+## 🏃‍♂️ Running the Application
 
 ```bash
-- Node v16.20.1
-- PostgreSQL 13.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44), 64-bit
+# Development mode
+npm run start:dev
+
+# Production mode
+npm run start:prod
+
+# Debug mode
+npm run start:debug
 ```
 
-## Installation
+The API will be available at `http://localhost:3000`
+
+## 🧪 Testing
 
 ```bash
-$ npm install
+# Unit tests
+npm run test
+
+# End-to-end tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
 ```
 
-## Running the app
+## 📚 API Endpoints
 
-```bash
-# development
-$ npm run start
+### Authentication
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `GET /auth/test` - Test endpoint
 
-# watch mode
-$ npm run start:dev
+### User Management
+- `GET /user/profile` - Get user profile (Protected)
+- `POST /user/update` - Update user profile (Protected)
 
-# production mode
-$ npm run start:prod
+### File Upload
+- `POST /common/upload-image` - Upload images (Protected)
+- `POST /common/uploads` - Upload multiple files (Protected)
+
+## 🔒 Security Features
+
+- **Input Validation**: All requests are validated using class-validator
+- **File Upload Security**: 
+  - File type validation (images only)
+  - File size limits (3MB max)
+  - Maximum files per upload (10 files)
+- **Security Headers**: Implemented via Helmet
+- **CORS Protection**: Configurable CORS policy
+- **JWT Authentication**: Secure token-based authentication
+
+## 📁 Project Structure
+
+```
+src/
+├── auth/           # Authentication module
+├── commons/        # Common utilities and file upload
+├── config/         # Configuration and middleware
+├── entitys/        # Database entities
+├── repository/     # Database repositories
+├── users/          # User management
+└── utils/          # Utility functions
 ```
 
-## Test
+## 🔧 Configuration
 
-```bash
-# unit tests
-$ npm run test
+The application uses environment variables for configuration. See `.env.example` for all available options.
 
-# e2e tests
-$ npm run test:e2e
+### Key configurations:
+- **Database**: PostgreSQL connection settings
+- **JWT**: Secret key and expiration
+- **File Upload**: Destination path and limits
+- **CORS**: Allowed origins and methods
 
-# test coverage
-$ npm run test:cov
-```
+## 🐛 Error Handling
 
-## Support
+The application includes global exception handling that:
+- Logs all errors
+- Returns consistent error responses
+- Handles both HTTP exceptions and unexpected errors
+- Includes request context in error logs
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🚀 Deployment
 
-## Stay in touch
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2. **Set production environment variables**
 
-## License
+3. **Start the application**
+   ```bash
+   npm run start:prod
+   ```
 
-Nest is [MIT licensed](LICENSE).
+## 📝 Development Guidelines
+
+- Follow NestJS best practices
+- Use TypeScript strict mode
+- Implement proper error handling
+- Write unit tests for new features
+- Validate all inputs
+- Use DTOs for request/response validation
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.

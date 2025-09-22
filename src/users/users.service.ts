@@ -1,13 +1,7 @@
-import {
-  HttpCode,
-  HttpStatus,
-  Injectable,
-  LoggerService,
-} from '@nestjs/common';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { UserEntity } from '../entitys/user.entity';
-// This should be a real class/interface representing a user entity
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { AccountEntity } from '../entitys/account.entity';
 import { RegisterUserDto } from './dto/register.user.dto';
 import { FAILURE, LOGIN_NAME_EXIST, SUCCESSFUL } from '../utils/message.util';

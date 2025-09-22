@@ -1,4 +1,4 @@
-interface LocalFileCommonDto {
+export interface LocalFileCommonDto {
   filename: string;
   path: string;
   mimetype: string;
