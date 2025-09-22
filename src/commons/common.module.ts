@@ -14,10 +14,7 @@ import { AppConfig } from '../config/app-config';
 
 @Module({
   imports: [ConfigModule],
-  providers: [
-    CommonService,
-    LocalFileRepository,
-  ],
+  providers: [CommonService, LocalFileRepository],
   controllers: [CommonController],
   exports: [CommonService],
 })

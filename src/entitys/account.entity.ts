@@ -1,11 +1,12 @@
 import {
   BaseEntity,
-  BeforeInsert, BeforeUpdate,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import * as moment from 'moment';
 import { DATE_FORMAT } from '../utils/constants.ultis';

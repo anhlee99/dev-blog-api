@@ -33,7 +33,7 @@ import { join } from 'path';
     // base module //
     AuthModule,
     UsersModule,
-    CommonModule
+    CommonModule,
   ],
   controllers: [],
   providers: [AppConfig],

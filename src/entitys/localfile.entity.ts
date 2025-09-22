@@ -1,10 +1,15 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as moment from 'moment';
 import { DATE_FORMAT } from '../utils/constants.ultis';
 
 @Entity('m_local_file')
 export class LocalFileEntity {
-
   @PrimaryGeneratedColumn({ type: 'bigint' })
   public id: number;
 
@@ -28,4 +33,3 @@ export class LocalFileEntity {
     this.created_at = new Date(moment().format(DATE_FORMAT));
   }
 }
-

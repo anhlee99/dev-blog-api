@@ -5,7 +5,7 @@ import {
   Request,
   UploadedFiles,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { AuthGuard } from '../auth/guard/auth.guard';

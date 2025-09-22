@@ -1,4 +1,9 @@
-import { HttpCode, HttpStatus, Injectable, LoggerService } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  LoggerService,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entitys/user.entity';
 // This should be a real class/interface representing a user entity
@@ -95,7 +100,8 @@ export class UsersService {
       userEntity.bio = updateUserDto.bio || userEntity.bio;
       userEntity.email = updateUserDto.email || userEntity.email;
       userEntity.facebook = updateUserDto.facebook || userEntity.facebook;
-      userEntity.user_setting_data = updateUserDto.user_setting_data || userEntity.user_setting_data;
+      userEntity.user_setting_data =
+        updateUserDto.user_setting_data || userEntity.user_setting_data;
       await queryRunner.manager.save(userEntity);
       await queryRunner.commitTransaction();
       return {

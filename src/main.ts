@@ -10,8 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   // public static file //
-  app.useStaticAssets(join(__dirname, '..', 'public/upload'),
-    {
+  app.useStaticAssets(join(__dirname, '..', 'public/upload'), {
     index: false,
     prefix: '/public/upload',
   });

@@ -6,15 +6,14 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import * as moment from 'moment/moment';
 import { DATE_FORMAT } from '../utils/constants.ultis';
 
 @Entity('t_users')
-export class UserEntity extends BaseEntity{
-
-  @PrimaryGeneratedColumn( {type: 'bigint'} )
+export class UserEntity extends BaseEntity {
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column({ type: 'bigint' })
@@ -63,7 +62,7 @@ export class UserEntity extends BaseEntity{
   roles: string;
 
   @Column({
-    type: 'jsonb'
+    type: 'jsonb',
   })
   user_setting_data: JSON;
 

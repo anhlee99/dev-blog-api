@@ -18,7 +18,7 @@ export function configuration(): Record<string, any> {
       },
       autoLoadEntities: true,
     },
-    UPLOADED_FILES_DESTINATION: process.env.UPLOADED_FILES_DESTINATION
+    UPLOADED_FILES_DESTINATION: process.env.UPLOADED_FILES_DESTINATION,
   };
 }
 

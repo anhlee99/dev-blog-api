@@ -23,7 +23,7 @@ import { UsersService } from '../users/users.service';
     AuthService,
     UsersService,
     UserRepository,
-    AccountRepository
+    AccountRepository,
     // apply check auth all api
     // {
     //   provide: APP_GUARD,
